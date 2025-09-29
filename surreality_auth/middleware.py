@@ -168,8 +168,16 @@ class AuthMiddleware:
             return False
 
 
-# Global instance for easy import
-auth_middleware = AuthMiddleware()
+# Global instance - will be initialized when needed
+_auth_middleware = None
+
+
+def _get_auth_middleware() -> AuthMiddleware:
+    """Get or create the global auth middleware instance."""
+    global _auth_middleware
+    if _auth_middleware is None:
+        _auth_middleware = AuthMiddleware()
+    return _auth_middleware
 
 
 # Convenience dependency functions
@@ -186,6 +194,7 @@ async def require_auth(
             # Use account_id to filter queries
             pass
     """
+    auth_middleware = _get_auth_middleware()
     return await auth_middleware.get_current_account_id(credentials)
 
 
@@ -204,4 +213,5 @@ def get_service_supabase() -> Client:
             .eq("account_id", account_id)\\
             .execute()
     """
+    auth_middleware = _get_auth_middleware()
     return auth_middleware.get_service_supabase()
