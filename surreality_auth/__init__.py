@@ -2,7 +2,7 @@
 Surreality Auth - Shared authentication middleware for Surreality AI services
 """
 
-from .middleware import AuthMiddleware, require_auth
+from .middleware import AuthMiddleware, require_auth, get_service_supabase
 
 __version__ = "1.0.0"
-__all__ = ["AuthMiddleware", "require_auth"]
+__all__ = ["AuthMiddleware", "require_auth", "get_service_supabase"]
